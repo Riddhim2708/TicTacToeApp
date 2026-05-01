@@ -12,6 +12,7 @@ import java.util.Scanner;
  * UC6 updates the board with the given symbol at the specified position.
  * UC7 allows the computer to make a random valid move (Easy Level).
  * UC8 implements a continuous turn-based game loop that runs until win or draw.
+ * UC9 detects if a player has won by examining rows, columns, and diagonals.
  */
 public class TicTacToe {
 
@@ -341,12 +342,50 @@ public class TicTacToe {
     }
 
     /**
-     * Placeholder for UC9: Check Winning Condition
-     * This will be implemented in UC9
+     * UC9: Check Winning Condition
+     * Goal: Detect if a player has won the game.
+     * Actor: Game System
+     * Flow: After each move → rows, columns, and diagonals checked.
+     * 
+     * Key Concepts:
+     * - Pattern Matching
+     * - Logical Conditions
+     * - Loop-Based Checks
+     * 
+     * Key Requirements:
+     * - Check all three rows
+     * - Check all three columns
+     * - Check both diagonals
+     * 
+     * Input: Symbol (X or O)
+     * Output: true if player has won, false otherwise
      */
     static boolean hasWon(char symbol) {
-        // Placeholder: Always returns false for now
-        // Will be fully implemented in UC9
+        // Check all three rows
+        for (int row = 0; row < 3; row++) {
+            if (board[row][0] == symbol && board[row][1] == symbol && board[row][2] == symbol) {
+                return true;
+            }
+        }
+        
+        // Check all three columns
+        for (int col = 0; col < 3; col++) {
+            if (board[0][col] == symbol && board[1][col] == symbol && board[2][col] == symbol) {
+                return true;
+            }
+        }
+        
+        // Check top-left to bottom-right diagonal
+        if (board[0][0] == symbol && board[1][1] == symbol && board[2][2] == symbol) {
+            return true;
+        }
+        
+        // Check top-right to bottom-left diagonal
+        if (board[0][2] == symbol && board[1][1] == symbol && board[2][0] == symbol) {
+            return true;
+        }
+        
+        // No winning pattern found
         return false;
     }
 }
