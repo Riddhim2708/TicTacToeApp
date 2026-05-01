@@ -11,6 +11,7 @@ import java.util.Scanner;
  * UC5 validates whether a move is within bounds and the cell is empty.
  * UC6 updates the board with the given symbol at the specified position.
  * UC7 allows the computer to make a random valid move (Easy Level).
+ * UC8 implements a continuous turn-based game loop that runs until win or draw.
  */
 public class TicTacToe {
 
@@ -19,6 +20,7 @@ public class TicTacToe {
     static boolean isHumanTurn;
     static char humanSymbol;
     static char computerSymbol;
+    static boolean gameOver = false;
 
     /**
      * UC1: Display Empty Tic-Tac-Toe Board
@@ -32,30 +34,11 @@ public class TicTacToe {
         tossAndAssignSymbols();
         displayTossResult();
         
-        // UC3: Accept user slot input
-        int slot = getUserSlot();
-        System.out.println("Slot entered: " + slot);
+        // UC8: Start the continuous game loop
+        playGame();
         
-        // UC4: Convert slot to row and column indices
-        int row = getRowFromSlot(slot);
-        int col = getColFromSlot(slot);
-        System.out.println("Row: " + row + " | Column: " + col);
-        
-        // UC5: Validate the move
-        boolean isValid = isValidMove(row, col);
-        if (isValid) {
-            System.out.println("Move is valid! You can proceed.");
-            
-            // UC6: Place the move on the board
-            placeMove(row, col, humanSymbol);
-            printBoard();
-            
-            // UC7: Computer makes a random move
-            computerMove();
-            printBoard();
-        } else {
-            System.out.println("Move is invalid! Try again.");
-        }
+        System.out.println("\n--- Game Over ---");
+        printBoard();
     }
 
     /**
@@ -260,5 +243,110 @@ public class TicTacToe {
         System.out.println("\nComputer's turn:");
         System.out.println("Computer selected slot: " + slot);
         placeMove(row, col, computerSymbol);
+    }
+
+    /**
+     * UC8: Continuous Turn-Based Game Loop
+     * Goal: Continue gameplay until win or draw is detected.
+     * Actor: Game System
+     * Flow: Turn starts → player move → check win/draw → switch turn → repeat.
+     * 
+     * Key Concepts:
+     * - While Loop
+     * - Game State Flags
+     * - Turn Switching
+     * 
+     * Key Requirements:
+     * - Alternate turns
+     * - Stop loop on win or draw
+     * 
+     * Input: None (uses game state variables)
+     * Output: Void (modifies board and game state)
+     */
+    static void playGame() {
+        Scanner scanner = new Scanner(System.in);
+        
+        // Game loop continues until game is over
+        while (!gameOver) {
+            if (isHumanTurn) {
+                // Human's turn
+                System.out.println("\nYour turn (Human - Symbol: " + humanSymbol + ")");
+                int slot = getUserSlot();
+                int row = getRowFromSlot(slot);
+                int col = getColFromSlot(slot);
+                
+                // Validate and place move
+                if (isValidMove(row, col)) {
+                    placeMove(row, col, humanSymbol);
+                    printBoard();
+                    
+                    // Check if human won
+                    if (hasWon(humanSymbol)) {
+                        System.out.println("\n🎉 Congratulations! You won the game!");
+                        gameOver = true;
+                        break;
+                    }
+                    
+                    // Check for draw
+                    if (isBoardFull()) {
+                        System.out.println("\n🤝 It's a draw!");
+                        gameOver = true;
+                        break;
+                    }
+                    
+                    // Switch turn
+                    isHumanTurn = false;
+                } else {
+                    System.out.println("Invalid move! Try again.");
+                }
+            } else {
+                // Computer's turn
+                System.out.println("\nComputer's turn (Symbol: " + computerSymbol + ")");
+                computerMove();
+                printBoard();
+                
+                // Check if computer won
+                if (hasWon(computerSymbol)) {
+                    System.out.println("\n💻 Computer won! Better luck next time.");
+                    gameOver = true;
+                    break;
+                }
+                
+                // Check for draw
+                if (isBoardFull()) {
+                    System.out.println("\n🤝 It's a draw!");
+                    gameOver = true;
+                    break;
+                }
+                
+                // Switch turn
+                isHumanTurn = true;
+            }
+        }
+    }
+
+    /**
+     * Helper method: Check if the board is full (all cells occupied)
+     * Used to detect draw condition
+     */
+    static boolean isBoardFull() {
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                if (board[row][col] == '-') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Placeholder for UC9: Check Winning Condition
+     * This will be implemented in UC9
+     */
+    static boolean hasWon(char symbol) {
+        // Placeholder: Always returns false for now
+        // Will be fully implemented in UC9
+        return false;
     }
 }
