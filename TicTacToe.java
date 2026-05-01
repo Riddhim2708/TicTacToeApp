@@ -9,6 +9,7 @@ import java.util.Scanner;
  * UC3 reads a slot number (1-9) entered by the user.
  * UC4 converts a user-entered slot number (1-9) into corresponding row and column indices of a 2D array.
  * UC5 validates whether a move is within bounds and the cell is empty.
+ * UC6 updates the board with the given symbol at the specified position.
  */
 public class TicTacToe {
 
@@ -43,6 +44,10 @@ public class TicTacToe {
         boolean isValid = isValidMove(row, col);
         if (isValid) {
             System.out.println("Move is valid! You can proceed.");
+            
+            // UC6: Place the move on the board
+            placeMove(row, col, humanSymbol);
+            printBoard();
         } else {
             System.out.println("Move is invalid! Try again.");
         }
@@ -188,5 +193,28 @@ public class TicTacToe {
         
         // Move is valid
         return true;
+    }
+
+    /**
+     * UC6: Place Move on Board
+     * Goal: Update the board with the given symbol at the specified position.
+     * Actor: Human Player / Computer Player
+     * Flow: Valid move → symbol placed → board updated.
+     * 
+     * Key Concepts:
+     * - State Update
+     * - Array Indexing
+     * - Reusable Methods
+     * 
+     * Key Requirements:
+     * - Update board correctly
+     * - Assumes the move has already been validated (defensive assumption)
+     * 
+     * Input: Row, Column, Symbol
+     * Output: Void (modifies the board array)
+     */
+    static void placeMove(int row, int col, char symbol) {
+        board[row][col] = symbol;
+        System.out.println("Symbol '" + symbol + "' placed at Row: " + row + ", Column: " + col);
     }
 }
