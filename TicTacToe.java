@@ -8,6 +8,7 @@ import java.util.Scanner;
  * UC2 performs a random toss to decide who plays first and assigns symbols (X or O).
  * UC3 reads a slot number (1-9) entered by the user.
  * UC4 converts a user-entered slot number (1-9) into corresponding row and column indices of a 2D array.
+ * UC5 validates whether a move is within bounds and the cell is empty.
  */
 public class TicTacToe {
 
@@ -37,6 +38,14 @@ public class TicTacToe {
         int row = getRowFromSlot(slot);
         int col = getColFromSlot(slot);
         System.out.println("Row: " + row + " | Column: " + col);
+        
+        // UC5: Validate the move
+        boolean isValid = isValidMove(row, col);
+        if (isValid) {
+            System.out.println("Move is valid! You can proceed.");
+        } else {
+            System.out.println("Move is invalid! Try again.");
+        }
     }
 
     /**
@@ -144,5 +153,40 @@ public class TicTacToe {
      */
     static int getColFromSlot(int slot) {
         return (slot - 1) % 3;
+    }
+
+    /**
+     * UC5: Validate User Move
+     * Goal: Ensure the move is within bounds and the cell is empty.
+     * Actor: Game System
+     * Flow: Row and column received → validation performed → move accepted or rejected.
+     * 
+     * Key Concepts:
+     * - Conditional Logic
+     * - Boundary Checking
+     * - Defensive Programming
+     * 
+     * Key Requirements:
+     * - Row and column must be 0–2
+     * - Cell must be empty
+     * 
+     * Input: Row, Column
+     * Output: true if valid, false otherwise.
+     */
+    static boolean isValidMove(int row, int col) {
+        // Boundary Checking: Ensure row and column are within 0-2 range
+        if (row < 0 || row > 2 || col < 0 || col > 2) {
+            System.out.println("Invalid move! Row and column must be between 0 and 2.");
+            return false;
+        }
+        
+        // Cell Availability Check: Ensure the cell is empty
+        if (board[row][col] != '-') {
+            System.out.println("Invalid move! Cell is already occupied.");
+            return false;
+        }
+        
+        // Move is valid
+        return true;
     }
 }
